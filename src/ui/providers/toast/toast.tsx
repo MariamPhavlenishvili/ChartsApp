@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { ToastType } from './types';
-import ToastComponent from 'src/components/Toast/Toast';
+import Toast from '@/components/Toast/Toast';
 
 interface ToastProps {
   renderToast: (type: ToastType, message: string) => void;
@@ -28,7 +28,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
       <div className='fixed bottom-4 right-4'>
         {toasts.map((toast: IToast, index: number) => (
-          <ToastComponent key={index} type={toast.type} message={toast.message} />
+          <Toast key={index} type={toast.type} message={toast.message} />
         ))}
       </div>
     </ToastContext.Provider>

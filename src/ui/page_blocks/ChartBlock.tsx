@@ -1,4 +1,4 @@
-import useFetch from 'src/hooks/useCharts';
+import useFetch from 'src/hooks/useFetch';
 import { BarChart } from '../components/Chart';
 import { useToastContext } from '../providers/toast';
 import { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ export function ChartBlock() {
   useEffect(() => {
     if (data) {
       setOriginalData(data);
-      setFilteredData(data); // Initialize filtered data with original data
+      setFilteredData(data);
       renderToast('success', 'Data fetched successfully!');
     }
 
@@ -33,12 +33,20 @@ export function ChartBlock() {
     const value = e.target.value ? parseInt(e.target.value, 10) : '';
     setMinValue(value);
     filterData(value, maxValue);
+
+    if (typeof value === 'number' && typeof maxValue === 'number' && value > maxValue) {
+      renderToast('error', 'Minimum value cannot be greater than maximum value!');
+    }
   };
 
   const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value ? parseInt(e.target.value, 10) : '';
     setMaxValue(value);
     filterData(minValue, value);
+
+    if (typeof value === 'number' && typeof minValue === 'number' && value < minValue) {
+      renderToast('error', 'Maximum value cannot be less than minimum value!');
+    }
   };
 
   const filterData = (min: number | '', max: number | '') => {
@@ -59,7 +67,7 @@ export function ChartBlock() {
   const handleReset = () => {
     setMinValue('');
     setMaxValue('');
-    setFilteredData(originalData); // Reset filtered data to original
+    setFilteredData(originalData);
   };
 
   return (
